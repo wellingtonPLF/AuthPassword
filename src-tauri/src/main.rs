@@ -21,8 +21,7 @@ use argon2::{
 // ************************************************************************************
 use aes_gcm::{
     aead::{Aead, AeadCore, KeyInit, OsRng},
-    Aes256Gcm, Key, 
-    // Nonce
+    Aes256Gcm, Key, Nonce
 };
 // ************************************************************************************
 
@@ -47,136 +46,144 @@ fn delete_password(id: &str) -> String{
     format!("{}", id)
 }
 // ************************************************************************************
-fn create_directory(name: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let directory_name:&str = &format!("src/{}", name);
-    let current_dir = env::current_dir()?;
-    let dir_path = current_dir.join(directory_name);
-    let str_directory = dir_path.to_str().ok_or("")?;
-    let formated_path:&str = &format!(r#"{}"#, str_directory);
+// fn create_directory(name: &str) -> Result<(), Box<dyn std::error::Error>> {
+//     let directory_name:&str = &format!("src/{}", name);
+//     let current_dir = env::current_dir()?;
+//     let dir_path = current_dir.join(directory_name);
+//     let str_directory = dir_path.to_str().ok_or("")?;
+//     let formated_path:&str = &format!(r#"{}"#, str_directory);
 
-    if let Err(e) = fs::create_dir_all(formated_path) {
-        eprintln!("Failed to create directory: {:?}", e);
-    }
+//     if let Err(e) = fs::create_dir_all(formated_path) {
+//         eprintln!("Failed to create directory: {:?}", e);
+//     }
 
-    Ok(())
-}
-
-fn verify_auth(password: &str, parsed_hash: &str) -> Result<bool, PasswordHashError> {
-    let parsed_hash = PasswordHash::new(parsed_hash)?;
-    let result = Argon2::default().verify_password(password.as_bytes(), &parsed_hash).is_ok();
-    Ok(result)
-}
-
-fn get_auth(directory: &str, name: &str) -> Result<String, io::Error> {
-    let file_path:&str = &format!("src/encrypt_data/{}/{}.txt", directory, name);
-    let mut file = File::open(file_path)?;
-    
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-    
-    Ok(contents)
-}
-
-fn hash_auth() -> Result<(), PasswordHashError> {
-    let password = b"12345678";
-    let salt = SaltString::generate(&mut OsRandom);
-    let argon2 = Argon2::default();
-    let password_hash = argon2.hash_password(password, &salt)?.to_string();
-    let parsed_hash = PasswordHash::new(&password_hash)?;
-    let parsed_hash_str = parsed_hash.to_string();
-
-    let _ = save_file("gmail", "auth", &parsed_hash_str);
-
-    Ok(())
-}
-
-fn encrypt(key_str: String, plaintext: String) -> Vec<u8> {
-    let key = Key::<Aes256Gcm>::from_slice(key_str.as_bytes());
-    let nonce = Aes256Gcm::generate_nonce(&mut OsRng);
-    
-    let cipher = Aes256Gcm::new(key);
-
-    let ciphered_data = cipher.encrypt(&nonce, plaintext.as_bytes())
-        .expect("failed to encrypt");
-
-    // combining nonce and encrypted data together
-    // for storage purpose
-    let mut encrypted_data: Vec<u8> = nonce.to_vec();
-    encrypted_data.extend_from_slice(&ciphered_data);
-
-    encrypted_data
-}
-
-// fn decrypt(key_str: String, encrypted_data: String) -> String {
-//     let encrypted_data = hex::decode(encrypted_data)
-//         .expect("failed to decode hex string into vec");
-
-//     let key = Key::<Aes256Gcm>::from_slice(key_str.as_bytes());
-
-//     let (nonce_arr, ciphered_data) = encrypted_data.split_at(12);
-//     let nonce = Nonce::from_slice(nonce_arr);
-
-//     let cipher = Aes256Gcm::new(key);
-
-//     let plaintext = cipher.decrypt(nonce, ciphered_data)
-//         .expect("failed to decrypt data");
-
-//     String::from_utf8(plaintext)
-//         .expect("failed to convert vector of bytes to string")
+//     Ok(())
 // }
 
-fn get_directory(directory: &str, name: &str) -> Result<PathBuf, Box<dyn Error>> {
-    let directory_name = &format!("src/encrypt_data/{}/{}.txt", directory, name);
-    let current_dir = env::current_dir()?;
-    let file_path = current_dir.join(directory_name);
+// fn verify_auth(password: &str, parsed_hash: &str) -> Result<bool, PasswordHashError> {
+//     let parsed_hash = PasswordHash::new(parsed_hash)?;
+//     let result = Argon2::default().verify_password(password.as_bytes(), &parsed_hash).is_ok();
+//     Ok(result)
+// }
 
-    Ok(file_path)
-}
-
-fn get_path(directory_path: PathBuf) -> Result<String, Box<dyn Error>> {
-    let str_directory = directory_path.to_str().ok_or("Failed to convert path to string")?;
-    let formated_path:&str = &format!(r#"{}"#, str_directory);
-
-    Ok(formated_path.to_string())
-}
-
-fn save_to_file(filename: &str, data: &[u8]) {
-    let mut file = File::create(filename).expect("failed to create file");
-    file.write_all(data).expect("failed to write to file");
-    println!("Encrypted data saved to {}", filename);
-}
-
-
-fn save_file(directory: &str, name: &str, content: &str) -> Result<(), Box<dyn Error>>{
-    // let directory_name:&str = &format!("src/encrypt_data/{}/{}.txt", directory, name);
-    // let current_dir = env::current_dir()?;
-    // let file_path = current_dir.join(directory_name);
-    // let str_directory = file_path.to_str().ok_or("")?;
-    // let formated_path:&str = &format!(r#"{}"#, str_directory);
-
-    let directory_path = get_directory(directory, name);
-    let formated_path = get_path(directory_path?).unwrap();
-
-    println!("{}", formated_path);
-
-    // if directory_path.exists() {
-    //     println!("File already exists, not overwriting.");
-    // } 
-    // else {
-    //     match File::create(formated_path) {
-    //         Ok(mut file) => {
-    //             if let Err(e) = writeln!(file, "{}", content) {
-    //                 eprintln!("Failed to write to file: {:?}", e);
-    //             }
-    //             println!("File created successfully!");
-    //         }
-    //         Err(e) => eprintln!("Failed to create file: {:?}", e),
-    //     }
-    // }
+// fn get_auth(directory: &str, name: &str) -> Result<String, io::Error> {
+//     let file_path:&str = &format!("src/encrypt_data/{}/{}.txt", directory, name);
+//     let mut file = File::open(file_path)?;
     
+//     let mut contents = String::new();
+//     file.read_to_string(&mut contents)?;
+    
+//     Ok(contents)
+// }
 
-    Ok(())
+fn get_encryption(directory: &str, name: &str) -> Result<String, io::Error> {
+    let file_path = format!("src/encrypt_data/{}/{}", directory, name);
+    let mut file = File::open(file_path)?;
+
+    let mut contents = Vec::new();
+    file.read_to_end(&mut contents)?;
+
+    Ok(hex::encode(contents))
 }
+
+// fn hash_auth() -> Result<(), PasswordHashError> {
+//     let password = b"12345678";
+//     let salt = SaltString::generate(&mut OsRandom);
+//     let argon2 = Argon2::default();
+//     let password_hash = argon2.hash_password(password, &salt)?.to_string();
+//     let parsed_hash = PasswordHash::new(&password_hash)?;
+//     let parsed_hash_str = parsed_hash.to_string();
+
+//     let _ = save_file("gmail", "auth", &parsed_hash_str);
+
+//     Ok(())
+// }
+
+// fn encrypt(key_str: String, plaintext: String) -> Vec<u8> {
+//     let key = Key::<Aes256Gcm>::from_slice(key_str.as_bytes());
+//     let nonce = Aes256Gcm::generate_nonce(&mut OsRng);
+    
+//     let cipher = Aes256Gcm::new(key);
+
+//     let ciphered_data = cipher.encrypt(&nonce, plaintext.as_bytes())
+//         .expect("failed to encrypt");
+
+//     let mut encrypted_data: Vec<u8> = nonce.to_vec();
+//     encrypted_data.extend_from_slice(&ciphered_data);
+
+//     encrypted_data
+// }
+
+fn decrypt(key_str: String, encrypted_data: String) -> String {
+    let encrypted_data = hex::decode(encrypted_data)
+        .expect("failed to decode hex string into vec");
+
+    let key = Key::<Aes256Gcm>::from_slice(key_str.as_bytes());
+
+    let (nonce_arr, ciphered_data) = encrypted_data.split_at(12);
+    let nonce = Nonce::from_slice(nonce_arr);
+
+    let cipher = Aes256Gcm::new(key);
+
+    let plaintext = cipher.decrypt(nonce, ciphered_data)
+        .expect("failed to decrypt data");
+
+    String::from_utf8(plaintext)
+        .expect("failed to convert vector of bytes to string")
+}
+
+// fn get_directory(directory: &str, name: &str) -> Result<PathBuf, Box<dyn Error>> {
+//     let directory_name = &format!("src/encrypt_data/{}/{}", directory, name);
+//     let current_dir = env::current_dir()?;
+//     let file_path = current_dir.join(directory_name);
+
+//     Ok(file_path)
+// }
+
+// fn get_path(directory_path: PathBuf) -> Result<String, Box<dyn Error>> {
+//     let str_directory = directory_path.to_str().ok_or("Failed to convert path to string")?;
+//     let formated_path:&str = &format!(r#"{}"#, str_directory);
+
+//     Ok(formated_path.to_string())
+// }
+
+// fn save_to_file(directory: &str, filename: &str, data: &[u8]) -> Result<(), Box<dyn std::error::Error>> {
+//     let directory_path = get_directory(directory, filename)?;
+//     let formated_path = get_path(directory_path.clone())?;
+
+//     if directory_path.exists() {
+//         println!("File already exists, not overwriting.");
+//     } 
+//     else {
+//         let mut file = File::create(formated_path).expect("failed to create file");
+//         file.write_all(data).expect("failed to write to file");
+//         println!("Encrypted data saved to {}", filename);   
+//     }
+
+//     Ok(())
+// }
+
+// fn save_file(directory: &str, name: &str, content: &str) -> Result<(), Box<dyn Error>>{
+//     let directory_path = get_directory(directory, name)?;
+//     let formated_path = get_path(directory_path.clone())?;
+
+//     if directory_path.exists() {
+//         println!("File already exists, not overwriting.");
+//     } 
+//     else {
+//         match File::create(formated_path) {
+//             Ok(mut file) => {
+//                 if let Err(e) = writeln!(file, "{}", content) {
+//                     eprintln!("Failed to write to file: {:?}", e);
+//                 }
+//                 println!("File created successfully!");
+//             }
+//             Err(e) => eprintln!("Failed to create file: {:?}", e),
+//         }
+//     }
+
+//     Ok(())
+// }
 
 fn main() {
     tauri::Builder::default()
@@ -211,14 +218,22 @@ fn main() {
 
             // let plaintext = "backendengineer.io".to_string();
 
-            // let key_str = "thiskeystrmustbe32charlongtowork".to_string();
+            let key_str = "thiskeystrmustbe32charlongtowork".to_string();
 
             // let encrypted_data = encrypt(key_str, plaintext);
 
-            // let encoded_string = hex::encode(encrypted_data);
-            // save_to_file("encrypted_data.bin", &encrypted_data);        
 
-            let _ = save_file("gmail", "vish", "hello");
+            
+
+            // let encoded_string = hex::encode(encrypted_data);
+            
+
+            // let _ = save_file("gmail", "vish", "hello");
+            // let _ = save_to_file("gmail", "encrypted_data.bin", &encrypted_data);
+
+            let valor = get_encryption("gmail", "encrypted_data.bin");
+            let decrypted_data = decrypt(key_str, valor?);
+            println!("{}", decrypted_data);
 
             Ok(())
         })
