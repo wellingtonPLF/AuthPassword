@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
+
+#logoAdd {
+    display: flex; 
+    justify-content: center; 
+    height: 100%;
+}
+
+#logoAdd > :first-child {
+    width: 640px;
+    margin-top: 7%;
+}
+
+#logoAdd > :nth-child(2) {
+    
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: rgba(255,255,255);
+}
+
+#logoAdd > :nth-child(2) > * {
+    justify-content: center;
+    margin-top: 10%;
+}
+
+#addNew {
+    border-radius: 20px;
+    overflow: hidden;
+    width: fit-content;
+    padding: 20px;
+}
+
+h3 {
+    font-weight: 500;
+    font-family: "Mukta", sans-serif;
+}
+
+#addNew label {
+    font-size: 15px;
+    font-family: "Mukta", sans-serif;
+}
+
+#addNew input {
+    font-size: 13px;
+    width: 500px;
+    margin: 10px 0 20px 0;
+    padding-left: 10px;
+    background-color: rgb(216, 216, 216);
+    border-bottom: 2px solid #735BF2;
+    border-radius: unset;
+    border-top-right-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+    box-shadow: unset;
+}
+
+#addNew > div:last-child {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#addNew > div:last-child > button {
+    border-color: rgba(0, 68, 255, 0.466);
+    height: 35px;
+    display: flex;
+    font-size: 14px;
+    color: rgba(0, 68, 255, 1);
+    align-items: center;
+    border-radius: 50px;
+    font-family: "Mukta", sans-serif;
+}
+
+#addNew > div:last-child > :last-child {
+    margin-left: 10px;
+}
+
+.beautyEdge {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+    transition: box-shadow 0.3s ease; 
+    overflow: hidden;
+}
+
+#textTitle { 
+    flex-grow: 1; text-align: center; cursor: default; margin-left: 40px;
+}
+
+#add {
+    font-size: 25px; padding: 0 20px; box-shadow: unset;
+}
+
+.line {
+    font-family: "Mukta", sans-serif;
+    border-bottom: 1px solid rgb(128, 128, 128, 0.2); 
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.line:hover {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+#title { 
+    font-family: "Mukta", sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    display: flex; 
+    height: 50px; 
+    padding-right: 10px;
+    justify-content: space-around; 
+    align-items: center;
+}
+
+.disable {
+    background-color: rgb(216, 216, 216);
+    border-color: grey !important;
+    color: grey !important;
+    box-shadow: unset;
+}

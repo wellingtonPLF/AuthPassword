@@ -1,0 +1,31 @@
+<div id="logoAdd">
+    <div>
+        <div class="beautyEdge" id="title">
+            <div id="textTitle">Autenticações</div>
+            <button id="add" @click="changeAddState()">+</button> 
+        </div>
+
+        <div class="beautyEdge" style="margin-top: 20px;">
+            
+            <router-link to="/password" v-for="item in arrayAuth">
+                <div class="line center" style="justify-content: flex-start;">
+                    <font-awesome-icon :icon="['fas', 'arrow-right']"  style="margin-right: 10px;"/>
+                    <div>{{item}}</div>
+                </div>
+            </router-link>            
+        </div>
+    </div>
+    <div :style="`display: ${(addAuthentication)? 'flex': 'none'};`">
+        <div id="addNew">
+            <div>
+                <h3>Adicionar nova autenticação</h3>
+                <label style="display: block;">Nova Autenticação</label>
+                <input v-model="myinput"/>
+            </div>
+            <div>
+                <button @click="changeAddState()">Cancelar</button>
+                <button :class="{ disable: myinput.length < 6 }" @click="saveAuth()" :disabled="myinput.length < 6">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
