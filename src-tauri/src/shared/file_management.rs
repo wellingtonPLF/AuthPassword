@@ -1,19 +1,8 @@
-use std::{env};
+use std::env;
 use std::path::PathBuf;
 use std::fs::{self, File};
 use std::io::{self, Read, Write};
 use std::error::Error;
-
-#[allow(dead_code)]
-pub fn get_auth(directory: &str, name: &str) -> Result<String, io::Error> {
-    let file_path:&str = &format!("src/encrypt_data/{}/{}.txt", directory, name);
-    let mut file = File::open(file_path)?;
-    
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-    
-    Ok(contents)
-}
 
 #[allow(dead_code)]
 pub fn get_directory(directory: &str, name: &str) -> Result<PathBuf, Box<dyn Error>> {
@@ -30,6 +19,17 @@ pub fn get_path(directory_path: PathBuf) -> Result<String, Box<dyn Error>> {
     let formated_path:&str = &format!(r#"{}"#, str_directory);
 
     Ok(formated_path.to_string())
+}
+
+#[allow(dead_code)]
+pub fn get_content(directory: &str, name: &str) -> Result<String, io::Error> {
+    let file_path:&str = &format!("src/encrypt_data/{}/{}", directory, name);
+    let mut file = File::open(file_path)?;
+    
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
+    
+    Ok(contents)
 }
 
 #[allow(dead_code)]
