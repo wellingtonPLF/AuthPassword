@@ -11,6 +11,8 @@ use shared::file_management::*;
 use shared::hashing::*;
 use shared::cryptography::*;
 
+use std::fs;
+
 // ************************************************************************************
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -20,15 +22,10 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 fn authenticate(authentication: &str) -> bool {
-    let hash_auth = get_content("", "auth").unwrap_or_else(|err| {
+    let hash_auth = get_content("", "auth.bin").unwrap_or_else(|err| {
         eprintln!("Error fetching content: {}", err);
         return false.to_string();
     });
-    
-    // match get_auth("gmail", "domain") {
-    //     Ok(contents) => println!("{}", contents),
-    //     Err(e) => eprintln!("Failed to get auth: {}", e),
-    // }
 
     match verify_auth(authentication, &hash_auth) {
         Ok(valid) => {
@@ -48,10 +45,39 @@ fn authenticate(authentication: &str) -> bool {
 }
 
 #[tauri::command]
-fn save_password(key_str: String, directory: &str, filename: &str, plaintext: String) {
-    let data = encrypt(key_str, plaintext);
+fn create_auth(directory: &str, filename: &str, content: &str) {
+    let _ = save_file(directory, filename, content);
+}
+
+#[tauri::command]
+fn save_password(key_str: String, directory: &str, filename: &str, password: String) {
+    let data = encrypt(key_str, password);
     let _ = save_to_file(directory, filename, &data);
 }
+
+// #[tauri::command]
+fn get_all_domain() -> Vec<String> {
+    let mut domains: Vec<String> = Vec::new();
+
+    for dir_entry in fs::read_dir("src/encrypt_data").expect("Failed to read directory") {
+        if let Ok(entry) = dir_entry {
+            let path = entry.path();
+            let name = path.file_name().expect("REASON").to_string_lossy();
+            let content = get_content(&name, "domain.txt").unwrap_or_else(|err| {
+                eprintln!("Error fetching content: {}", err);
+                return false.to_string();
+            });
+            domains.push(content);
+        }
+    }
+
+    domains
+}
+
+// #[tauri::command]
+// fn get_all_auth() -> String{
+//     format!("{}", id)
+// }
 
 #[tauri::command]
 fn update_password(id: &str) -> String{
@@ -69,9 +95,11 @@ fn main() {
         .setup(|_app| {
             let _ = create_directory("encrypt_data");
             let _ = hash_auth(b"wellplf@gmail.com\n123456789");
+            let x = get_all_domain();
+            println!("{:?}", x);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet, delete_password, update_password, save_password, authenticate])
+        .invoke_handler(tauri::generate_handler![greet, delete_password, update_password, save_password, authenticate, create_auth])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

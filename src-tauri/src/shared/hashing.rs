@@ -24,7 +24,7 @@ pub fn hash_auth(password: &[u8]) -> Result<(), PasswordHashError> {
     let parsed_hash = PasswordHash::new(&password_hash)?;
     let parsed_hash_str = parsed_hash.to_string();
 
-    let _ = save_file("", "auth", &parsed_hash_str);
+    let _ = save_file("../", "authentication.bin", &parsed_hash_str);
 
     Ok(())
 }
