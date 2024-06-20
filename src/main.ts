@@ -16,7 +16,6 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 
 window.Vue = app
 window.Vue.router = router
-app.config.productionTip = false;
 
 app.use(router);
 app.mount('#app');

@@ -4,7 +4,7 @@ use aes_gcm::{
 };
 
 #[allow(dead_code)]
-pub fn encrypt(key_str: String, plaintext: String) -> Vec<u8> {
+pub fn encrypt(key_str: &str, plaintext: &str) -> String {
     let key = Key::<Aes256Gcm>::from_slice(key_str.as_bytes());
     let nonce = Aes256Gcm::generate_nonce(&mut OsRng);
     
@@ -16,11 +16,11 @@ pub fn encrypt(key_str: String, plaintext: String) -> Vec<u8> {
     let mut encrypted_data: Vec<u8> = nonce.to_vec();
     encrypted_data.extend_from_slice(&ciphered_data);
 
-    encrypted_data
+    hex::encode(encrypted_data)
 }
 
 #[allow(dead_code)]
-pub fn decrypt(key_str: String, encrypted_data: String) -> String {
+pub fn decrypt(key_str: &str, encrypted_data: &str) -> String {
     let encrypted_data = hex::decode(encrypted_data)
         .expect("failed to decode hex string into vec");
 
@@ -36,4 +36,16 @@ pub fn decrypt(key_str: String, encrypted_data: String) -> String {
 
     String::from_utf8(plaintext)
         .expect("failed to convert vector of bytes to string")
+}
+
+#[allow(dead_code)]
+pub fn hex_to_bytes(hex: &str) -> Result<Vec<u8>, String> {
+    if hex.len() % 2 != 0 {
+        return Err("Hex string has an odd length".into());
+    }
+    
+    (0..hex.len())
+        .step_by(2)
+        .map(|i| u8::from_str_radix(&hex[i..i+2], 16).map_err(|e| e.to_string()))
+        .collect()
 }
