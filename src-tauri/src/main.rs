@@ -16,6 +16,24 @@ use std::fs;
 // ************************************************************************************
 
 #[tauri::command]
+fn check_auth() -> bool{
+    match get_content("..", "authentication.bin") {
+        Ok(_) => {
+            true
+        }
+        Err(_) => {
+            false
+        }
+    }
+}
+
+#[tauri::command]
+fn registry(key: &str) -> bool{
+    let result = hash_auth(key.as_bytes()).unwrap();
+    result
+}
+
+#[tauri::command]
 fn authenticate(authentication: &str) -> bool {
     let hash_auth = get_content("", "../authentication.bin").unwrap_or_else(|err| {
         eprintln!("Error fetching content: {}", err);
@@ -41,15 +59,18 @@ fn authenticate(authentication: &str) -> bool {
 
 #[tauri::command]
 fn create_domain(directory: &str, content: &str) -> bool {
+    println!("Creating Domain...");
     let full_path = format!("encrypt_data/{}", directory);
     let _ = create_directory(&full_path);
     let result = save_file(directory, "domain.txt", content).unwrap();
+    println!("Domain Created!");
     result
     
 }
 
 #[tauri::command]
 fn save_password(key_str: &str, directory: &str, password: &str) -> bool{
+    println!("Saving Password...");
     let data = encrypt(key_str, password);
     let array_data = [data].to_vec();
     let filename = "auth.bin";
@@ -58,6 +79,7 @@ fn save_password(key_str: &str, directory: &str, password: &str) -> bool{
         let all_passwords = get_hex_password(key_str, directory, password);
         let update = all_passwords.join("\n");
         let value = update_file(directory, "auth.bin", &update).unwrap();
+        println!("Password saved successfully!");
         result = value;
     }
     result
@@ -65,18 +87,26 @@ fn save_password(key_str: &str, directory: &str, password: &str) -> bool{
 
 #[tauri::command]
 fn update_password(key_str: &str, directory: &str, index: usize, password: &str) -> bool{
+    println!("Updating Password...");
     let new_data = encrypt(key_str, password);
 
-    let mut rows = get_encryption(&directory, "auth.bin").unwrap();
-
-    if let Some(row_to_replace) = rows.get_mut(index) {
-        *row_to_replace = new_data;
-    }
-
-    let update = rows.join("\n");
-
-    let result = update_file(&directory, "auth.bin", &update).unwrap();
-    result
+    match get_encryption(&directory, "auth.bin") {
+        Ok(mut rows) => {
+            if let Some(row_to_replace) = rows.get_mut(index) {
+                *row_to_replace = new_data;
+            }
+        
+            let update = rows.join("\n");
+        
+            let result = update_file(&directory, "auth.bin", &update).unwrap();
+            println!("Password updated successfully!");
+            result
+        }
+        Err(_) => {
+            println!("Password Not updated!");
+            false
+        }
+    }    
 }
 
 #[tauri::command]
@@ -128,6 +158,7 @@ fn delete_password(directory: &str, index: usize) -> bool{
 
 #[tauri::command]
 fn delete_domain(directory: &str) -> bool{
+    println!("Deleting Domain...");
     let result = delete_directory(directory);
     result
 }
@@ -165,10 +196,21 @@ fn splice(mut array: Vec<String>, index: usize) -> Vec<String>{
 fn main() {
     tauri::Builder::default()
         .setup(|_app| {
-            let _ = create_directory("encrypt_data"); 
+            let _ = create_directory("encrypt_data");            
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![create_domain, delete_password, save_password, update_password, authenticate, get_all_domain, delete_domain, get_auth])
+        .invoke_handler(tauri::generate_handler![
+            delete_password, 
+            update_password, 
+            get_all_domain, 
+            delete_domain, 
+            save_password,
+            create_domain, 
+            authenticate,             
+            check_auth,
+            get_auth,
+            registry
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

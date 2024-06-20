@@ -7,28 +7,58 @@ export default {
     data() {
         return {
             error: "",
+            registry: true,
             username: "",
             password: ""
         }
     },
     methods: {
         ...mapActions('authReducer', ['setAuth']),
+        handleInput(event: any) {
+            this.typedText = event.target.value;
+            if (this.error == "Not valid!") {
+                this.error = ""
+            }
+        },
+        runState(value: boolean) {
+            if (value) {
+                this.error = ""
+                this.setAuth(this.password + "\n" + this.username)
+                this.$router.push('/credentials');
+            }
+            else {
+                this.error = "Error on Registry!"
+            }
+        },
+        registrar() {
+            mainService.registry(this.username, this.password).then(
+                it => {
+                    this.runState(it)
+                }
+                ).catch( _ => {
+                    this.error = "Error on Registry!"
+                }
+            );
+        },
         authenticate() {
             mainService.authenticate(this.username, this.password).then(
                 it => {
-                    if (it) {
-                        this.error = ""
-                        this.setAuth(this.password + this.username)
-                        this.$router.push('/credentials');
-                    }
-                    else {
-                        this.error = "Not valid!"
-                    }
+                    this.runState(it)
                 }
-                ).catch((e) => {
-                    console.error("Error at Authentication");
+                ).catch( _ => {
+                    this.error = "Not valid!"
                 }
             );
         }
+    },
+    mounted() {
+        mainService.check_auth().then(
+            it => {
+                this.registry = it;
+            }
+            ).catch( _ => {
+                this.error = "Error on check!"
+            }
+        );
     }
 };

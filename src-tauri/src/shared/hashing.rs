@@ -17,15 +17,15 @@ pub fn verify_auth(password: &str, parsed_hash: &str) -> Result<bool, PasswordHa
 }
 
 #[allow(dead_code)]
-pub fn hash_auth(password: &[u8]) -> Result<(), PasswordHashError> {
+pub fn hash_auth(password: &[u8]) -> Result<bool, PasswordHashError> {
     let salt = SaltString::generate(&mut OsRandom);
     let argon2 = Argon2::default();
     let password_hash = argon2.hash_password(password, &salt)?.to_string();
     let parsed_hash = PasswordHash::new(&password_hash)?;
     let parsed_hash_str = parsed_hash.to_string();
 
-    let _ = save_file("../", "authentication.bin", &parsed_hash_str);
+    let result = save_file("../", "authentication.bin", &parsed_hash_str).unwrap();
 
-    Ok(())
+    Ok(result)
 }
 

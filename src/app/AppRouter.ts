@@ -15,7 +15,7 @@ const routes = [
     component: LogoAddComponent
   },
   {
-    path: '/password',
+    path: '/password/:name',
     name: 'password',
     component: PasswordAdd
   },

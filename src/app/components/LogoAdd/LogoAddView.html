@@ -6,13 +6,15 @@
         </div>
 
         <div class="beautyEdge" style="margin-top: 20px;">
-            
-            <router-link to="/password" v-for="item in arrayAuth">
-                <div class="line center" style="justify-content: flex-start;">
-                    <font-awesome-icon :icon="['fas', 'arrow-right']"  style="margin-right: 10px;"/>
-                    <div>{{item}}</div>
-                </div>
-            </router-link>            
+            <div class="line center" style="display: flex; justify-content: space-between;" v-for="(item, index) in arrayAuth" :key="index">
+                <router-link class="lineWidth" :to="getPath(item)">
+                    <div class="center">
+                        <font-awesome-icon :icon="['fas', 'arrow-right']"  style="margin-right: 10px;"/>
+                        <div>{{item}}</div>
+                    </div>
+                </router-link>
+                <font-awesome-icon :icon="['fas', 'eraser']" @click="excluirDomain(index)" style="color: rgb(255, 49, 49); z-index: 100;"/>
+            </div>
         </div>
     </div>
     <div :style="`display: ${(addAuthentication)? 'flex': 'none'};`">

@@ -121,3 +121,9 @@ h3 {
     color: grey !important;
     box-shadow: unset;
 }
+
+.lineWidth {
+    display: flex;
+    justify-content: flex-start;
+    width: -webkit-fill-available;
+}

@@ -1,25 +1,85 @@
 import mainService from "../../shared/services/mainService";
-
+import { mapState } from 'vuex'
 
 export default {
     name: "LogoAdd",
     components: {},
+    computed: {
+        ...mapState('authReducer', {
+            auth: (state: any) => state.auth
+        })
+    },
     data() {
         return {
-            xxx: 'None',
+            error: "Password",
             edit: undefined,
-            arrayPassword: [
-                {
-                    id: 1,
-                    nome: 'wellplf@gmail.com',
-                    password: '12345',
-                    ativo: true
-                }
-            ]
+            domain: "",
+            arrayPassword: []
         }
     },
     methods: {
-        addNewPassword(index: number) : void {
+        saveAuth(item: any) {
+            this.edit = undefined;
+            const index = this.arrayPassword.indexOf(item);
+            
+            if (item.ativo) {
+                const data = item.nome + "\n" + item.password;
+                this.error = "Password...";
+                mainService.updatePassword(this.auth, this.domain, index, data).then(
+                    it => {
+                        if (it) {
+                            this.error = "Password";
+                        }
+                        else {
+                            this.error = "Update Error!";
+                        }
+                    }
+                    ).catch((_) => {
+                        this.error = "Update Error!";
+                    }
+                );
+            }
+            else {
+                const data = item.nome + "\n" + item.password;
+                this.error = "Password...";
+                mainService.savePassword(this.auth, this.domain, data).then(
+                    it => {
+                        if (it) {
+                            item.ativo = true;
+                            this.error = "Password";
+                        }
+                        else {
+                            this.error = "Password Error!";
+                        }                        
+                    }
+                    ).catch((_) => {
+                        this.error = "Password Error!";
+                    }
+                );
+            }
+        },
+        excluirAuth(index: number) {
+            this.arrayPassword.splice(index, 1);
+            this.error = "Password...";
+            mainService.deletePassword(this.domain, index).then(
+                it => {
+                    if  (it) {
+                        this.error = "Password";
+                    }
+                    else {
+                        this.error = "Password Error!";
+                    }
+                    
+                }
+                ).catch((_) => {
+                    this.error = "Password Error!";
+                }
+            );
+        },
+        updateAuth(index: number) {
+            this.edit = index;            
+        },
+        addNewPassword() : void {
             this.arrayPassword.push(
                 {
                     nome: '',
@@ -29,37 +89,6 @@ export default {
             )
             this.edit = this.arrayPassword.length - 1;
         },
-        saveAuth(item: any) {
-            this.edit = undefined;
-            
-            if (item.ativo) {    
-                mainService.updatePassword(item).then(
-                    it => {
-                        this.xxx = it;
-                    }
-                    ).catch((e) => {
-                        this.xxx = 'ERROR';
-                        console.error("Error at UpdatePassword");
-                    }
-                );
-            }
-            else {
-                mainService.savePassword(item).then(
-                    it => {
-                        item.ativo = true;
-                        this.xxx = it;
-                        // item.id = it.id;
-                    }
-                    ).catch((e) => {
-                        this.xxx = 'ERROR';
-                        console.error("Error at SavePassword");
-                    }
-                );
-            }
-        },
-        updateAuth(index: number) {
-            this.edit = index;            
-        },
         cancel(index: number) {
             if (this.arrayPassword[index].ativo == false) {
                 this.arrayPassword.splice(index, 1);
@@ -68,72 +97,24 @@ export default {
                 this.edit = undefined
             }
         },
-        excluirAuth(index: number) {
-            const obj = this.arrayPassword[index];
-            this.arrayPassword.splice(index, 1);
-            mainService.deletePassword(obj.id).then(
-                it => {
-                    this.xxx = it;
-                }
-                ).catch((_) => {
-                    this.xxx = 'ERROR';
-                    console.error("Error at DeletePassword");
-                }
-            );
-        },
         async copy(value: string) {
             if (value.length >= 4) {
                 await navigator.clipboard.writeText(value);
             }
         }
+    },
+    mounted() {
+        this.domain = this.$route.params.name;
+        mainService.get_all_password(this.auth, this.domain).then(
+            it => {
+                this.arrayPassword = it.map((obj) => {
+                    const item = obj.split("\n");
+                    return { nome: item[0], password: item[1], ativo: true}
+                });
+            }
+            ).catch((_) => {
+                this.error = "Can't Get Any Password!";
+            }
+        );
     }
 };
-
-
-// methods: {
-//     addNewPassword() : void {
-//         this.arrayPassword.push(
-//             {
-//                 nome: '',
-//                 password: '',
-//                 ativo: false
-//             }
-//         )
-//         this.edit = this.arrayPassword.length - 1;
-//     },
-//     saveAuth(item: any) {
-//         this.edit = undefined;
-        
-//         if (item.ativo) {    
-//             mainService.updatePassword(item).then(_ => {}).catch((_) => {});
-//         }
-//         else {
-//             mainService.savePassword(item).then(
-//                 it => {
-//                     item.ativo = true;
-//                     item.id = it.id;
-//             }).catch((_) => {});
-//         }
-//     },
-//     updateAuth(index: number) {
-//         this.edit = index;            
-//     },
-//     cancel(index: number) {
-//         if (this.arrayPassword[index].ativo == false) {
-//             this.arrayPassword.splice(index, 1);
-//         }
-//         else {
-//             this.edit = undefined
-//         }
-//     },
-//     excluirAuth(index: number) {
-//         this.arrayPassword.splice(index, 1);
-//         const obj = this.arrayPassword[index];
-//         mainService.deletePassword(obj.id).then(_ => {}).catch((_) => {});
-//     },
-//     async copy(value: string) {
-//         if (value.length >= 4) {
-//             await navigator.clipboard.writeText(value);
-//         }
-//     }
-// }
