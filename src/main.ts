@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import "./styles.css";
 import App from "./app/App.vue";
 import router from './app/AppRouter';
+import store from './app/shared/vuex/store.ts';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -18,4 +19,5 @@ window.Vue = app
 window.Vue.router = router
 
 app.use(router);
+app.use(store);
 app.mount('#app');

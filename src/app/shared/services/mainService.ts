@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-class PasswordService {
+class MainService {
   
     constructor() {
     }
@@ -81,4 +81,4 @@ class PasswordService {
     }
 }
 
-export default new PasswordService();
+export default new MainService();

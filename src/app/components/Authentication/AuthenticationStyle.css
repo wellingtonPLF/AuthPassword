@@ -1,3 +1,28 @@
 input {
-    margin-top: 5px;
+    margin-top: 10px;
+}
+
+#pageAuth {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh;
+}
+
+#pageAuth > div {
+    display: flex; 
+    flex-direction: column; 
+    width: 300px; 
+    height: 200px; 
+    margin-bottom: 30vh;
+}
+
+#error {
+    margin: 6px 0px;
+    color: red;
+    font-weight: 600;
+}
+
+#confirm {
+    font-weight: 600;
 }

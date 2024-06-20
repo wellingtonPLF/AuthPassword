@@ -1,13 +1,9 @@
-<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-    <div style="display: flex; flex-direction: column; width: 300px; height: 200px; margin-bottom: 30vh;">
-        <h2>Autenticação</h2>
-        <label>Username: </label>
-        <input placeholder="username" />
-        <label>Password: </label>
-        <input placeholder="password" />
-
-        <div>{{x}}</div>
-
-        <button @click="trySomething()">tentar</button>
+<div id="pageAuth">
+    <div>
+        <h2 style="text-align: center;">Autenticação</h2>
+        <input placeholder="username" v-model="username" />
+        <input placeholder="password" v-model="password" />
+        <div id="error">{{error}}</div>
+        <button id="confirm" @click="authenticate()">confirm</button>
     </div>
 </div>

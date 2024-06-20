@@ -1,4 +1,4 @@
-import passwordService from "../../shared/services/passwordService";
+import mainService from "../../shared/services/mainService";
 
 
 export default {
@@ -33,7 +33,7 @@ export default {
             this.edit = undefined;
             
             if (item.ativo) {    
-                passwordService.updatePassword(item).then(
+                mainService.updatePassword(item).then(
                     it => {
                         this.xxx = it;
                     }
@@ -44,7 +44,7 @@ export default {
                 );
             }
             else {
-                passwordService.savePassword(item).then(
+                mainService.savePassword(item).then(
                     it => {
                         item.ativo = true;
                         this.xxx = it;
@@ -71,7 +71,7 @@ export default {
         excluirAuth(index: number) {
             const obj = this.arrayPassword[index];
             this.arrayPassword.splice(index, 1);
-            passwordService.deletePassword(obj.id).then(
+            mainService.deletePassword(obj.id).then(
                 it => {
                     this.xxx = it;
                 }
@@ -105,10 +105,10 @@ export default {
 //         this.edit = undefined;
         
 //         if (item.ativo) {    
-//             passwordService.updatePassword(item).then(_ => {}).catch((_) => {});
+//             mainService.updatePassword(item).then(_ => {}).catch((_) => {});
 //         }
 //         else {
-//             passwordService.savePassword(item).then(
+//             mainService.savePassword(item).then(
 //                 it => {
 //                     item.ativo = true;
 //                     item.id = it.id;
@@ -129,7 +129,7 @@ export default {
 //     excluirAuth(index: number) {
 //         this.arrayPassword.splice(index, 1);
 //         const obj = this.arrayPassword[index];
-//         passwordService.deletePassword(obj.id).then(_ => {}).catch((_) => {});
+//         mainService.deletePassword(obj.id).then(_ => {}).catch((_) => {});
 //     },
 //     async copy(value: string) {
 //         if (value.length >= 4) {

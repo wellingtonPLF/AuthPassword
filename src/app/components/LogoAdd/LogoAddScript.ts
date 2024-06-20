@@ -1,7 +1,13 @@
+import { mapState } from 'vuex'
 
 export default {
     name: "LogoAdd",
     components: {},
+    computed: {
+        ...mapState('authReducer', {
+            auth: (state: any) => state.auth
+        })
+    },
     data() {
         return {
             addAuthentication: false,
