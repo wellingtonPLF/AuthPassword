@@ -31,12 +31,14 @@ export default {
             }
         },
         registrar() {
-            const minimo = 5;
-            if (this.username.length < minimo) {
-                this.error = `username mínimo de ${minimo} caracteres`
+            const userLength = this.username.length;
+            const bits = 31;
+            const condition = bits - userLength;
+            if (userLength < 13) {
+                this.error = `username mínimo de 13 caracteres`
             }
-            else if (this.password.length < minimo) {
-                this.error = `password mínimo de ${minimo} caracteres`
+            else if (this.password.length < condition) {
+                this.error = `password mínimo de ${condition} caracteres`
             }
             else {
                 mainService.registry(this.username, this.password).then(
