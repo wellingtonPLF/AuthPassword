@@ -2,12 +2,12 @@
   "build": {
     "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": "yarn build",
-    "devPath": "http://localhost:1420",
+    "devPath": "http://localhost:3420",
     "distDir": "../dist"
   },
   "package": {
-    "productName": "tauri_pass",
-    "version": "0.0.0"
+    "productName": "Encryption",
+    "version": "1.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -19,18 +19,34 @@
     },
     "windows": [
       {
-        "title": "tauri_pass",
+        "title": "Encryption",
         "width": 800,
         "height": 600
       }
     ],
     "security": {
-      "csp": null
+      "csp": {
+        "default-src": ["'self'"],
+        "script-src": ["'self'"],
+        "style-src": ["'self'"],
+        "img-src": ["'self'"],
+        "font-src": ["'self'"],
+        "object-src": ["'none'"],
+        "media-src": ["'self'"],
+        "frame-src": ["'none'"],
+        "connect-src": ["'self'"],
+        "worker-src": ["'self'"],
+        "manifest-src": ["'self'"],
+        "frame-ancestors": ["'none'"],
+        "base-uri": ["'self'"],
+        "form-action": ["'self'"],
+        "sandbox": ["allow-same-origin"]
+      }
     },
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.wellington.myauth",
+      "identifier": "com.wellington.encryption",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

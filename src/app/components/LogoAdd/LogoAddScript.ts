@@ -14,10 +14,7 @@ export default {
         return {
             addAuthentication: false,
             myinput: '',
-            arrayAuth: [
-                "oasdaiusdausidpasudb",
-                "oasdaiusdausidpasudbs"
-            ]
+            arrayAuth: []
         }
     },
     methods: {

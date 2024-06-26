@@ -16,7 +16,7 @@ export default {
         ...mapActions('authReducer', ['setAuth']),
         handleInput(event: any) {
             this.typedText = event.target.value;
-            if (this.error == "Not valid!") {
+            if (this.error != "") {
                 this.error = ""
             }
         },
@@ -31,14 +31,23 @@ export default {
             }
         },
         registrar() {
-            mainService.registry(this.username, this.password).then(
-                it => {
-                    this.runState(it)
-                }
-                ).catch( _ => {
-                    this.error = "Error on Registry!"
-                }
-            );
+            const minimo = 5;
+            if (this.username.length < minimo) {
+                this.error = `username mínimo de ${minimo} caracteres`
+            }
+            else if (this.password.length < minimo) {
+                this.error = `password mínimo de ${minimo} caracteres`
+            }
+            else {
+                mainService.registry(this.username, this.password).then(
+                    it => {
+                        this.runState(it)
+                    }
+                    ).catch( _ => {
+                        this.error = "Error on Registry!"
+                    }
+                );
+            }
         },
         authenticate() {
             mainService.authenticate(this.username, this.password).then(

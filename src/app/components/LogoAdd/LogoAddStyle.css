@@ -95,7 +95,6 @@ h3 {
 .line {
     font-family: "Mukta", sans-serif;
     border-bottom: 1px solid rgb(128, 128, 128, 0.2); 
-    padding: 10px 15px;
     cursor: pointer;
     font-size: 15px;
 }
@@ -126,4 +125,5 @@ h3 {
     display: flex;
     justify-content: flex-start;
     width: -webkit-fill-available;
+    padding: 10px 0px 10px 15px;
 }

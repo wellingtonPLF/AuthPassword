@@ -113,7 +113,7 @@ export default {
                 });
             }
             ).catch((_) => {
-                this.error = "Can't Get Any Password!";
+                this.error = "Can't get any password!";
             }
         );
     }

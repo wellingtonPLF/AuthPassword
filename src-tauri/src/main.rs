@@ -13,7 +13,12 @@ use shared::cryptography::*;
 
 use std::fs;
 
-// ************************************************************************************
+// ****************************** RUNNING APP ********************************************
+
+// #> npm run tauri dev
+// #> npm run tauri build
+
+// ***************************************************************************************
 
 #[tauri::command]
 fn check_auth() -> bool{
@@ -196,7 +201,7 @@ fn splice(mut array: Vec<String>, index: usize) -> Vec<String>{
 fn main() {
     tauri::Builder::default()
         .setup(|_app| {
-            let _ = create_directory("encrypt_data");            
+            let _ = create_directory("encrypt_data");   
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
