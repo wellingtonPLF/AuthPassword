@@ -1,0 +1,34 @@
+#deleting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 10px;
+}
+
+#deleting > div:first-child {
+    padding: 0px 25px;
+    text-align: center;
+    width: -webkit-fill-available;
+}
+
+#deleting > div:nth-child(2) {
+    padding: 0px;
+}
+
+.btnByDeleting {
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    padding: 5px;
+    width: 80px;
+}
+
+.btnByDeleting:hover {
+    border-color: red;
+}
+
+.btnByDeleting:first-child:hover {
+    border-color: gray;
+}

@@ -1,8 +1,12 @@
 <div id="logoAdd">
     <div>
         <div class="beautyEdge" id="title">
-            <div id="textTitle">Autenticações</div>
-            <button id="add" @click="changeAddState()">+</button> 
+            <div class="center" style="justify-content: space-between; width: 100%;" v-if="!deleting">
+                <div id="textTitle">Autenticações</div>
+                <button id="add" @click="changeAddState()">+</button> 
+            </div>
+
+            <DeleteHandler v-if="deleting" v-on:optionDelete="deleteOption" />
         </div>
 
         <div class="beautyEdge" style="margin-top: 20px;">
@@ -13,11 +17,11 @@
                         <div>{{item}}</div>
                     </div>
                 </router-link>
-                <font-awesome-icon :icon="['fas', 'eraser']" @click="excluirDomain(index)" style="color: rgb(255, 49, 49); z-index: 100; margin-right: 15px;"/>
+                <font-awesome-icon :icon="['fas', 'eraser']" @click="excluirDomain(index)" style="color: rgb(255, 49, 49); z-index: 10; margin-right: 15px;"/>
             </div>
         </div>
     </div>
-    <div :style="`display: ${(addAuthentication)? 'flex': 'none'};`">
+    <div :style="`display: ${(addAuthentication)? 'flex': 'none'}; z-index: 100;`">
         <div id="addNew">
             <div>
                 <h3>Adicionar nova autenticação</h3>

@@ -1,10 +1,13 @@
 import { mapState } from 'vuex'
 import mainService from '../../shared/services/mainService';
 import { get_domain } from '../../shared/utils/general';
+import DeleteHandler from '../DeleteHandler/DeleteHandler.vue';
 
 export default {
     name: "LogoAdd",
-    components: {},
+    components: {
+        DeleteHandler
+    },
     computed: {
         ...mapState('authReducer', {
             auth: (state: any) => state.auth
@@ -13,7 +16,9 @@ export default {
     data() {
         return {
             addAuthentication: false,
+            deleting: false,
             myinput: '',
+            objIndex: undefined,
             arrayAuth: []
         }
     },
@@ -22,10 +27,17 @@ export default {
             this.myinput = '';
             this.addAuthentication = !this.addAuthentication;
         },
+        deleteOption(value: boolean) {
+            if (value) {
+                const domain = get_domain(this.arrayAuth[this.objIndex]);
+                mainService.deleteDomain(domain).then( _ => {})
+                this.arrayAuth.splice(this.objIndex, 1);
+            }
+            this.deleting = !this.deleting
+        },
         excluirDomain(index: number) {
-            const domain = get_domain(this.arrayAuth[index]);
-            mainService.deleteDomain(domain).then( _ => {})
-            this.arrayAuth.splice(index, 1);
+            this.objIndex = index;
+            this.deleting = true;
         },
         saveAuth() {
             this.arrayAuth.push(this.myinput);
