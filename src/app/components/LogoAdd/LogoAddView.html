@@ -9,7 +9,7 @@
             <DeleteHandler v-if="deleting" v-on:optionDelete="deleteOption" />
         </div>
 
-        <div class="beautyEdge" style="margin-top: 20px;">
+        <div class="beautyEdge" style="margin-top: 20px; margin-bottom: 20px;">
             <div class="line center" style="display: flex; justify-content: space-between;" v-for="(item, index) in arrayAuth" :key="index">
                 <router-link class="lineWidth" :to="getPath(item)">
                     <div class="center">
