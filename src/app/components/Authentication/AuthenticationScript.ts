@@ -8,6 +8,7 @@ export default {
         return {
             error: "",
             registry: true,
+            enter: false,
             username: "",
             password: ""
         }
@@ -43,9 +44,11 @@ export default {
             else {
                 mainService.registry(this.username, this.password).then(
                     it => {
+                        this.enter = false;
                         this.runState(it)
                     }
                     ).catch( _ => {
+                        this.enter = false;
                         this.error = "Error on Registry!"
                     }
                 );
@@ -54,15 +57,27 @@ export default {
         authenticate() {
             mainService.authenticate(this.username, this.password).then(
                 it => {
+                    this.enter = false;
                     this.runState(it)
                 }
                 ).catch( _ => {
+                    this.enter = false;
                     this.error = "Not valid!"
                 }
             );
+        },
+        handleEnter(){
+            this.enter = true;
+            if (!this.registry) {
+                this.registrar()
+            }
+            else {
+                this.authenticate()
+            }
         }
     },
     mounted() {
+        this.$refs.username.focus();
         mainService.check_auth().then(
             it => {
                 this.registry = it;

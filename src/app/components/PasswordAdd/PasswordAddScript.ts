@@ -1,18 +1,24 @@
 import mainService from "../../shared/services/mainService";
 import { mapState } from 'vuex'
+import DeleteHandler from "../DeleteHandler/DeleteHandler.vue";
 
 export default {
     name: "LogoAdd",
-    components: {},
+    components: {
+        DeleteHandler
+    },
     computed: {
         ...mapState('authReducer', {
             auth: (state: any) => state.auth
-        })
+        }),
     },
     data() {
         return {
             error: "Password",
             edit: undefined,
+            deleting: false,
+            choice: undefined,
+            objIndex: undefined,
             domain: "",
             arrayPassword: []
         }
@@ -59,25 +65,13 @@ export default {
             }
         },
         excluirAuth(index: number) {
-            this.arrayPassword.splice(index, 1);
-            this.error = "Password...";
-            mainService.deletePassword(this.domain, index).then(
-                it => {
-                    if  (it) {
-                        this.error = "Password";
-                    }
-                    else {
-                        this.error = "Password Error!";
-                    }
-                    
-                }
-                ).catch((_) => {
-                    this.error = "Password Error!";
-                }
-            );
+            this.objIndex = index,
+            this.deleting = true;
+            this.scrollToTop();
         },
         updateAuth(index: number) {
-            this.edit = index;            
+            this.edit = index;
+            this.choice = { ...this.arrayPassword[index]}
         },
         addNewPassword() : void {
             this.arrayPassword.push(
@@ -94,6 +88,7 @@ export default {
                 this.arrayPassword.splice(index, 1);
             }
             else {
+                this.arrayPassword[index] = this.choice
                 this.edit = undefined
             }
         },
@@ -101,6 +96,33 @@ export default {
             if (value.length >= 4) {
                 await navigator.clipboard.writeText(value);
             }
+        },
+        deleteOption(value: boolean) {
+            if (value) {
+                this.arrayPassword.splice(this.objIndex, 1);
+                this.error = "Password...";
+                mainService.deletePassword(this.domain, this.objIndex).then(
+                    it => {
+                        if  (it) {
+                            this.error = "Password";
+                        }
+                        else {
+                            this.error = "Password Error!";
+                        }
+                        
+                    }
+                    ).catch((_) => {
+                        this.error = "Password Error!";
+                    }
+                );
+            }
+            this.deleting = !this.deleting
+        },
+        scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     },
     mounted() {

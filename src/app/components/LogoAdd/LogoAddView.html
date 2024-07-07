@@ -2,16 +2,19 @@
     <div>
         <div class="beautyEdge" id="title">
             <div class="center" style="justify-content: space-between; width: 100%;" v-if="!deleting">
+                <div id="search" @click="search()">
+                    <font-awesome-icon :icon="['fas', 'search']"/>
+                </div> 
                 <div id="textTitle">Autenticações</div>
                 <button id="add" @click="changeAddState()">+</button> 
             </div>
 
-            <DeleteHandler v-if="deleting" v-on:optionDelete="deleteOption" />
+            <DeleteHandler style="font-size: 17px !important; font-weight: 600; " v-if="deleting" v-on:optionDelete="deleteOption" />
         </div>
 
         <div class="beautyEdge" style="margin-top: 20px; margin-bottom: 20px;">
-            <div class="line center" style="display: flex; justify-content: space-between;" v-for="(item, index) in arrayAuth" :key="index">
-                <router-link class="lineWidth" :to="getPath(item)">
+            <div :class="`line center ${choice == index ? 'choice': ''}`" style="display: flex; justify-content: space-between;" v-for="(item, index) in arrayAuth" :key="index">
+                <router-link class="lineWidth" @click="getLinkPosition(index)" :id="`cred_${index}`" :to="getPath(item)">
                     <div class="center">
                         <font-awesome-icon :icon="['fas', 'arrow-right']"  style="margin-right: 10px;"/>
                         <div>{{item}}</div>
@@ -21,17 +24,32 @@
             </div>
         </div>
     </div>
-    <div :style="`display: ${(addAuthentication)? 'flex': 'none'}; z-index: 100;`">
+    <div :style="`display: ${(addAuthentication)? 'flex': 'none'}; z-index: 100; position: fixed;`">
         <div id="addNew">
             <div>
                 <h3>Adicionar nova autenticação</h3>
                 <label style="display: block;">Nova Autenticação</label>
-                <input v-model="myinput"/>
+                <input v-model="myinput" @keyup.enter="saveAuth()"/>
             </div>
             <div>
                 <button @click="changeAddState()">Cancelar</button>
-                <button :class="{ disable: myinput.length < 6 }" @click="saveAuth()" :disabled="myinput.length < 6">Salvar</button>
+                <button :style="`border-color: ${ enter ? '#735BF2': '' };`" :class="{ disable: myinput.length < 6 }" @click="saveAuth()" :disabled="myinput.length < 6">Salvar</button>
             </div>
         </div>
     </div>
+    <div :style="`display: ${(dialog)? 'flex': 'none'}; z-index: 100; position: fixed;`" id="dialog">
+        <div id="searchDialog">
+            <div> SEARCH</div>
+            <input style="border-color: black;" v-model="searchValue" ref="search"/>
+            <button @click="search()">
+                <font-awesome-icon :icon="['far', 'paper-plane']"/>
+            </button>
+        </div>
+    </div>
 </div>
+<!-- <div class="beautyEdge" style="background-color: white; position: fixed; top: 50%; left: 80%; z-index: 20;">
+    <button id="add" @click="changeAddState()">+</button> 
+    <div id="search" @click="search()">
+        <font-awesome-icon :icon="['fas', 'search']"/>
+    </div> 
+</div> -->

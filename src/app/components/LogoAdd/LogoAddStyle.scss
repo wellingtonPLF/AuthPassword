@@ -4,6 +4,8 @@
     display: flex; 
     justify-content: center; 
     height: 100%;
+    min-height: 100vh;
+    position: relative;
 }
 
 #logoAdd > :first-child {
@@ -51,8 +53,8 @@ h3 {
     background-color: rgb(216, 216, 216);
     border-bottom: 2px solid #735BF2;
     border-radius: unset;
-    border-top-right-radius: 10px !important;
-    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     box-shadow: unset;
 }
 
@@ -72,6 +74,10 @@ h3 {
     font-family: "Mukta", sans-serif;
 }
 
+#addNew > div:last-child > button:hover {
+    border-color: #735BF2;
+}
+
 #addNew > div:last-child > :last-child {
     margin-left: 10px;
 }
@@ -89,7 +95,10 @@ h3 {
 }
 
 #add {
-    font-size: 25px; padding: 0 20px; box-shadow: unset;
+    font-size: 25px; 
+    padding: 0 20px 0 20px; 
+    margin-right: 10px;
+    box-shadow: unset;
 }
 
 .line {
@@ -109,7 +118,6 @@ h3 {
     font-weight: 500;
     display: flex; 
     height: 50px; 
-    padding-right: 10px;
     justify-content: space-around; 
     align-items: center;
 }
@@ -126,4 +134,82 @@ h3 {
     justify-content: flex-start;
     width: -webkit-fill-available;
     padding: 10px 0px 10px 15px;
+}
+
+.choice {
+    box-sizing: border-box;
+    border: 3px solid #735BF2;
+}
+
+.choice:first-of-type {
+    border-top-right-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+}
+
+.choice:last-of-type {
+    border-bottom-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+}
+
+#search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 10px;
+    color: #59596e;
+    cursor: pointer;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+#search:hover {
+    transform: scale(0.8)
+}
+
+
+#dialog {
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    background-color: rgb(0 0 0 / 50%);
+}
+
+#searchDialog {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#searchDialog > :first-child {
+    border-bottom: 3px solid #735BF2;
+    margin-bottom: 10px;
+}
+
+#searchDialog input {
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
+    border-right: transparent;
+}
+
+#searchDialog button {
+    svg {
+        transform: scale(1.1)
+    }
+}
+
+#searchDialog button:hover {
+    svg {
+        transform: scale(0.9)
+    }
+}
+
+#searchDialog button {
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
+    border-color: black;
+    border-left: transparent;
 }

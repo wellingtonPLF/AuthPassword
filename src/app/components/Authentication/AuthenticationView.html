@@ -1,10 +1,10 @@
 <div id="pageAuth">
     <div>
         <h2 style="text-align: center;">Autenticação</h2>
-        <input placeholder="username" v-model="username" @input="handleInput"/>
-        <input type="password" placeholder="password" v-model="password" @input="handleInput"/>
+        <input placeholder="username" ref="username" v-model="username" @input="handleInput"/>
+        <input type="password" placeholder="password" v-model="password" @input="handleInput" @keyup.enter="handleEnter()"/>
         <div id="error">{{error}}</div>
-        <button v-if="registry" class="confirm" @click="authenticate()">confirm</button>
-        <button v-if="!registry" class="confirm" @click="registrar()">cadastrar</button>
+        <button v-if="registry" class="confirm" @click="authenticate()" :style="`border-color: ${ enter ? '#396cd8': '' };`">confirm</button>
+        <button v-if="!registry" class="confirm" @click="registrar()" :style="`border-color: ${ enter ? '#396cd8': '' };`">cadastrar</button>
     </div>
 </div>
