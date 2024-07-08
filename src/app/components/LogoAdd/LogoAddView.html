@@ -2,14 +2,17 @@
     <div>
         <div class="beautyEdge" id="title">
             <div class="center" style="justify-content: space-between; width: 100%;" v-if="!deleting">
-                <button class="icon" @click="changeAddState()">+</button> 
-                <div id="textTitle">{{(((!cred && !catalogo) == true) ? 'Autenticações' : ( cred ? 'Aba Auths' : 'Catálogo'))}}</div>
-                <div id="search" @click="search()">
+                <button class="icon" @click="catalogoState()" style="margin: 0 8px 0 5px; transform: scale(0.9);">
+                    <font-awesome-icon :icon="['fas', 'bars-staggered']" />
+                </button> 
+
+                <div id="search" @click="search()" style="margin: 0; padding: 0;">
                     <font-awesome-icon :icon="['fas', 'search']"/>
                 </div> 
-                <button class="icon" @click="catalogoState()">
-                    <font-awesome-icon :icon="['fas', 'list']"/>
-                </button> 
+                
+                <div id="textTitle">{{(((!cred && !catalogo) == true) ? 'Autenticações' : ( cred ? 'Aba Auths' : 'Catálogo'))}}</div>
+
+                <button class="icon" @click="changeAddState()" style="margin-right: 5px;">+</button> 
                 <button class="icon" @click="credState()">
                     <font-awesome-icon :icon="['fas', 'chart-simple']"/>
                     <div id="count" class="center">{{domainNames.length}}</div>
