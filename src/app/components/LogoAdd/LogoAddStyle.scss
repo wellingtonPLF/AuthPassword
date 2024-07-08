@@ -94,11 +94,12 @@ h3 {
     flex-grow: 1; text-align: center; cursor: default; margin-left: 40px;
 }
 
-#add {
+.icon {
     font-size: 25px; 
     padding: 0 20px 0 20px; 
     margin-right: 10px;
     box-shadow: unset;
+    position: relative;
 }
 
 .line {
@@ -187,6 +188,7 @@ h3 {
 #searchDialog > :first-child {
     border-bottom: 3px solid #735BF2;
     margin-bottom: 10px;
+    font-weight: 600;
 }
 
 #searchDialog input {
@@ -212,4 +214,21 @@ h3 {
     border-bottom-left-radius: unset;
     border-color: black;
     border-left: transparent;
+}
+
+.line:active {
+    background-color: #bcb5dd;
+}
+
+#count{
+    background-color: #735BF2;
+    border-radius: 100%;
+    position: absolute;
+    bottom: 13%;
+    right: 9%;
+    height: 12px;
+    width: 12px;
+    color: white;
+    font-size: 8px;
+    padding: 0 0px 1px 0;
 }

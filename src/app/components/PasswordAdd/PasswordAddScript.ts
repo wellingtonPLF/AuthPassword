@@ -93,9 +93,7 @@ export default {
             }
         },
         async copy(value: string) {
-            if (value.length >= 4) {
-                await navigator.clipboard.writeText(value);
-            }
+            await navigator.clipboard.writeText(value);
         },
         deleteOption(value: boolean) {
             if (value) {

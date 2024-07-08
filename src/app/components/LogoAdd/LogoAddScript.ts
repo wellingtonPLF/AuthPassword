@@ -2,11 +2,16 @@ import { mapState, mapActions } from 'vuex'
 import mainService from '../../shared/services/mainService';
 import { get_domain, sleep } from '../../shared/utils/general';
 import DeleteHandler from '../DeleteHandler/DeleteHandler.vue';
+import { TrigramIndex } from '../../shared/utils/pg_trgm';
+import Credentials from '../Credentials/Credentials.vue';
+import Catalogo from '../Catalogo/Catalogo.vue';
 
 export default {
     name: "LogoAdd",
     components: {
-        DeleteHandler
+        DeleteHandler,
+        Credentials,
+        Catalogo
     },
     computed: {
         ...mapState('authReducer', {
@@ -18,6 +23,10 @@ export default {
     },
     data() {
         return {
+            listDomain: [],
+            domainNames: [],
+            cred: false,
+            catalogo: false,
             addAuthentication: false,
             dialog: false,
             deleting: false,
@@ -26,72 +35,7 @@ export default {
             searchValue: "",
             choice: undefined,
             objIndex: undefined,
-            arrayAuth: [
-                // "asndfpóabf1",
-                // "asndfpóabf2",
-                // "asndfpóabf3",
-                // "asndfpóabf4",
-                // "asndfpóabf5",
-                // "asndfpóabf6",
-                // "asndfpóabf7",
-                // "asndfpóabf8",
-                // "asndfpóabf9",
-                // "asndfpóabf10",
-                // "asndfpóabf11",
-                // "asndfpóabf12",
-                // "asndfpóabf13",
-                // "asndfpóabf14",
-                // "asndfpóabf15",
-                // "asndfpóabf16",
-                // "asndfpóabf17",
-                // "asndfpóabf18",
-                // "asndfpóabf19",
-                // "asndfpóabf20",
-                // "asndfpóabf21",
-                // "asndfpóabf22",
-                // "asndfpóabf23",
-                // "asndfpóabf24",
-                // "asndfpóabf25",
-                // "asndfpóabf26",
-                // "asndfpóabf27",
-                // "asndfpóabf28",
-                // "asndfpóabf29",
-                // "asndfpóabf30",
-                // "asndfpóabf31",
-                // "asndfpóabf32",
-                // "asndfpóabf33",
-                // "asndfpóabf34",
-                // "asndfpóabf35",
-                // "asndfpóabf36",
-                // "asndfpóabf37",
-                // "asndfpóabf38",
-                // "asndfpóabf39",
-                // "asndfpóabf40",
-                // "asndfpóabf41",
-                // "asndfpóabf42",
-                // "asndfpóabf43",
-                // "asndfpóabf44",
-                // "asndfpóabf45",
-                // "asndfpóabf46",
-                // "asndfpóabf47",
-                // "asndfpóabf48",
-                // "asndfpóabf49",
-                // "asndfpóabf50",
-                // "asndfpóabf51",
-                // "asndfpóabf52",
-                // "asndfpóabf53",
-                // "asndfpóabf54",
-                // "asndfpóabf55",
-                // "asndfpóabf56",
-                // "asndfpóabf57",
-                // "asndfpóabf58",
-                // "asndfpóabf59",
-                // "asndfpóabf60",
-                // "asndfpóabf61",
-                // "asndfpóabf62",
-                // "asndfpóabf63",
-                // "asndfpóabf64",
-            ]
+            arrayAuth: []
         }
     },
     methods: {
@@ -132,8 +76,14 @@ export default {
                 behavior: 'smooth'
             });
         },
-        getLinkPosition(index: number) {
-            this.setScroll({ position: window.scrollY, index});
+        getLinkPosition(event: any, index: number) {
+            if (event.ctrlKey) {
+                event.preventDefault();
+                this.customFunction(index);
+            }
+            else {
+                this.setScroll({ position: window.scrollY, index});
+            }
         },
         search() {
             if (!this.dialog) {
@@ -142,26 +92,48 @@ export default {
                 })
             }
             else {
-                // const x = ["Valorant", "League of legends", "The legend of zelda", "Hantaro", "Yu-gi-oh", "Dragon Ball Z", "Minecraft"]
-                // const fuseSearch = new Fuse(x, { includeScore: true });
-                // const z = fuseSearch.search("Valo");
-                // this.error = z;
-
-                // const fuseSearch = new Fuse(this.arrayAuth);
-                // const result = fuseSearch.search(this.searchValue)
-                // const index = 29; //indexOf(result)
-
-                // const found = document.getElementById(`cred_${index}`);
-                // if (found != undefined) {
-                //     const linkRect = found!.getBoundingClientRect();
-                
-                //     const obj = { position: linkRect.top + window.scrollY - 6 , index};
-                //     this.scrollTo(obj.position);
-                //     this.choice = obj.index;
-                // }
+                const trigramIndex = new TrigramIndex(this.arrayAuth);
+                const result = trigramIndex.find(this.searchValue)[0]
+                if (result) {
+                    const index = this.arrayAuth.indexOf(result.phrase);
+                    const found = document.getElementById(`cred_${index}`);
+                    if (found != undefined) {
+                        const linkRect = found!.getBoundingClientRect();
+                        const obj = { position: linkRect.top + window.scrollY - 300 , index};
+                        this.scrollTo(obj.position);
+                        this.choice = obj.index;
+                    }
+                }
             }
             this.dialog = !this.dialog;
-        }
+        },
+        customFunction(index: number) {
+            const domain = this.arrayAuth[index];
+            this.domainNames.push(domain);
+            mainService.get_all_password(this.auth, domain).then(
+                it => {
+                    this.listDomain.push(it.map((obj) => {
+                        const item = obj.split("\n");
+                        return { nome: item[0], password: item[1], ativo: true}})
+                    );
+                }
+            );
+        },
+        credState(){
+            this.catalogo = false;
+            this.cred = !this.cred;
+        },
+        catalogoState(){
+            this.cred = false;
+            this.catalogo = !this.catalogo;
+        },
+        handleEsc() {
+            this.dialog = !this.dialog;
+        },  
+        deleteRegistry(index: number) {
+            this.listDomain.splice(index, 1);
+            this.domainNames.splice(index, 1);
+        },
     },
     mounted() {
         this.scrollTo(this.scroll.position);

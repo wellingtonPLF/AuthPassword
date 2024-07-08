@@ -1,0 +1,10 @@
+<div style="padding-bottom: 20px;">
+    <div class="catalogo" v-for="item in arrayList">
+        <div style="padding: 10px;">
+            <div style="font-size: 18px;"><b>Email:</b> {{item.email}}</div>
+            <ul v-for="value in item.array">
+                <li>{{value}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
