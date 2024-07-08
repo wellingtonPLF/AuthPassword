@@ -22,7 +22,7 @@
         </div>
         <Catalogo v-if="catalogo"></Catalogo>
         <Credentials v-if="cred" :listDomain="listDomain" :domainNames="domainNames" v-on:removeItem="deleteRegistry"></Credentials>
-        <div v-if="!cred && !catalogo" class="beautyEdge" style="margin-top: 20px; margin-bottom: 20px;">
+        <div v-if="!cred && !catalogo" class="beautyEdge" style="margin-top: 20px; margin-bottom: 20px;" ref="myDiv">
             <div :class="`line center ${choice == index ? 'choice': ''}`" style="display: flex; justify-content: space-between;" v-for="(item, index) in arrayAuth" :key="index">
                 <router-link class="lineWidth" @click="getLinkPosition($event, index)" :id="`cred_${index}`" :to="getPath(item)">
                     <div class="center">

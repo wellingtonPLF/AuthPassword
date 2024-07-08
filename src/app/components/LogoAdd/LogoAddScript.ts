@@ -149,11 +149,15 @@ export default {
           it => {
             this.arrayAuth = it;
           }
-        )        
+        )
     },
     mounted() {
         window.addEventListener('keydown', this.handleEsc);
-        this.choice = this.scroll.index;        
-        this.scrollTo(this.scroll.position);
+        this.choice = this.scroll.index;
+
+        const resizeObserver = new ResizeObserver(() => {
+            this.scrollTo(this.scroll.position);
+        });
+        resizeObserver.observe(this.$refs.myDiv);
     }
 };
