@@ -4,6 +4,9 @@ import vue from "@vitejs/plugin-vue";
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
   plugins: [vue()],
+  build: {
+    chunkSizeWarningLimit: 1000000, // Increase the limit to 1,000,000 bytes (1 MB)
+  },
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
   // 1. prevent vite from obscuring rust errors
