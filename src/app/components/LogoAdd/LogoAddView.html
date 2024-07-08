@@ -1,11 +1,10 @@
-<div id="logoAdd" @keyup.esc="handleEsc">
+<div id="logoAdd">
     <div>
         <div class="beautyEdge" id="title">
             <div class="center" style="justify-content: space-between; width: 100%;" v-if="!deleting">
-                <button class="icon" @click="catalogoState()" style="margin: 0 8px 0 5px; transform: scale(0.9);">
-                    <font-awesome-icon :icon="['fas', 'bars-staggered']" />
+                <button class="icon" @click="catalogoState()" style="margin: 0 8px 0 5px;">
+                    <font-awesome-icon :icon="['fas', 'bars-staggered']" style="transform: scale(0.8);" />
                 </button> 
-
                 <div id="search" @click="search()" style="margin: 0; padding: 0;">
                     <font-awesome-icon :icon="['fas', 'search']"/>
                 </div> 

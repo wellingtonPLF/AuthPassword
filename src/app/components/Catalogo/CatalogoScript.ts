@@ -19,10 +19,21 @@ export default {
         findEmail(email: string, emails: string[]) {
             const r = emails.filter((obj) => obj == email)
             return r.length > 0
-        }
+        },
+        sortEmailFirst(array: string[]) {
+            const r = array.sort((a, b) => {
+                if (a.includes('@') && !b.includes('@')) {
+                  return -1;
+                }
+                if (!a.includes('@') && b.includes('@')) {
+                  return 1;
+                }
+                return 0;
+            });
+            return r;
+        }        
     },
     mounted() { 
-
         mainService.get_all_domain().then(
             async it => {
                 const emails: string[] = [];
@@ -40,6 +51,8 @@ export default {
                     })
                     return { domain, emails: result}
                 }))
+
+                this.sortEmailFirst(emails);
 
                 this.arrayList = emails.map((email) => {
 

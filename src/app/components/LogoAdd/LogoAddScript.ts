@@ -71,6 +71,7 @@ export default {
             return `/password/${path}`;
         },
         scrollTo(value: number) {
+            console.log(`Scrolling: ${this.scroll.position}`)
             window.scrollTo({
                 top: value,
                 behavior: 'smooth'
@@ -103,13 +104,15 @@ export default {
                         this.scrollTo(obj.position);
                         this.choice = obj.index;
                     }
+                    this.searchValue = ""
                 }
             }
             this.dialog = !this.dialog;
         },
         customFunction(index: number) {
-            const domain = this.arrayAuth[index];
+            const domain = get_domain(this.arrayAuth[index]);
             this.domainNames.push(domain);
+            
             mainService.get_all_password(this.auth, domain).then(
                 it => {
                     this.listDomain.push(it.map((obj) => {
@@ -127,21 +130,30 @@ export default {
             this.cred = false;
             this.catalogo = !this.catalogo;
         },
-        handleEsc() {
-            this.dialog = !this.dialog;
+        handleEsc(event: any) {
+            if (event.key === 'Escape') {
+                this.dialog = !this.dialog;
+                this.searchValue = ""
+            }
         },  
         deleteRegistry(index: number) {
             this.listDomain.splice(index, 1);
             this.domainNames.splice(index, 1);
         },
     },
-    mounted() {
-        this.scrollTo(this.scroll.position);
-        this.choice = this.scroll.index;
+    beforeUnmount() {
+        window.removeEventListener('keydown', this.handleEsc);
+    },
+    beforeMount() {
         mainService.get_all_domain().then(
           it => {
             this.arrayAuth = it;
           }
-        )
+        )        
+    },
+    mounted() {
+        window.addEventListener('keydown', this.handleEsc);
+        this.choice = this.scroll.index;        
+        this.scrollTo(this.scroll.position);
     }
 };
