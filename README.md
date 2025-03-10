@@ -1,5 +1,6 @@
 <h1 align="center">
-  <img alt="auth-password-logo" src="src/assets/logo.png"  />
+  <img alt="auth-password-logo" src="src-tauri/icons/128x128.png"  />
+  <div>Auth Password</div>
 </h1>
 
 <p align="center">
@@ -19,7 +20,7 @@
 <br>
 
 <p align="center">
-  <img alt="auth-password-screen" src="src/assets/mainScreen.png" width="100%">
+  <img alt="auth-password-screen" src="src/assets/mainScreen.png" width="60%">
 </p>
 
 ## ✨ Tecnologias
@@ -42,10 +43,9 @@ Você pode visualizar o layout do projeto através da imagem representada acima.
 ## 🚀 Como executar
 
 - Clone o repositório
-- Adicionar dependencias: Tauri `cargo install` && Vue `yarn install`
-- Compilar o aplicativo: `npm run tauri build`
-- Você encontrará o arquivo executável na pasta `src-tauri/target/release/bundle`
-
+- Adicione dependencias: Tauri `cargo install` && Vue `yarn install`
+- Compile o aplicativo: `npm run tauri build`
+- Encontre o arquivo executável na pasta `src-tauri/target/release/bundle`
 
 Agora você pode visualizar e utilizar a aplicação.
 
