@@ -29,6 +29,10 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 - [Tauri](https://v2.tauri.app/)
 - [Vue3](https://vuejs.org/)
+- [Vuex](https://vuex.vuejs.org/ptbr/)
+- [Vite](https://vitejs.dev/)
+- [HTML5](https://developer.mozilla.org/pt-BR/docs/Web/HTML)
+- [Git](https://git-scm.com/)
 - [Rust](https://www.rust-lang.org)
 - [TypeScript](https://www.typescriptlang.org/)
 
