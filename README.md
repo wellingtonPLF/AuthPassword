@@ -1,16 +1,58 @@
-# Tauri + Vue 3 + TypeScript
+<h1 align="center">
+  <img alt="auth-password-logo" src="src/assets/logo.png"  />
+</h1>
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+<p align="center">
+  <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-layout">Layout</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-como-executar">Como executar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-licença">Licença</a>
+</p>
 
-## Recommended IDE Setup
+<p align="center">
+  <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=1976d2&labelColor=000000">
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+ <img src="https://img.shields.io/static/v1?label=Project&message=01&color=1976d2&labelColor=000000" alt="Project 01" />
+</p>
 
-## Type Support For `.vue` Imports in TS
+<br>
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+<p align="center">
+  <img alt="auth-password-screen" src="src/assets/mainScreen.png" width="100%">
+</p>
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+## ✨ Tecnologias
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+Esse projeto foi desenvolvido com as seguintes tecnologias:
+
+- [Tauri](https://v2.tauri.app/)
+- [Vue3](https://vuejs.org/)
+- [Rust](https://www.rust-lang.org)
+- [TypeScript](https://www.typescriptlang.org/)
+
+## 💻 Projeto
+
+O AuthPassword é um app que faz o gerenciamento de senhas de forma organizada para a melhor experiência do usuário.
+
+## 🔖 Layout
+
+Você pode visualizar o layout do projeto através da imagem representada acima.
+
+## 🚀 Como executar
+
+- Clone o repositório
+- Adicionar dependencias: Tauri `cargo install` && Vue `yarn install`
+- Compilar o aplicativo: `npm run tauri build`
+- Você encontrará o arquivo executável na pasta `src-tauri/target/release/bundle`
+
+
+Agora você pode visualizar e utilizar a aplicação.
+
+## 📄 Licença
+
+Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE.md) para mais detalhes.
+
+---
+
+Feito com ♥ by WellingtonPLF 👋🏻 [Contact Me 😊](https://mail.google.com/mail/?view=cm&fs=1&to=wellplf@gmail.com)
