@@ -20,7 +20,7 @@
 <br>
 
 <p align="center">
-  <img alt="auth-password-screen" src="src/assets/mainScreen.png" width="60%">
+  <img alt="auth-password-screen" src="src/assets/mainScreen.png" width="100%">
 </p>
 
 ## ✨ Tecnologias
